@@ -1,0 +1,117 @@
+<?php
+
+/**
+ * Plugin Name:     Test
+ * Version:         0.0.0
+ */
+
+session_start();
+
+require_once('tables.php');
+require_once('serial-code-status.php');
+require_once('serial-code-response.php');
+require_once('admin-page.php');
+require_once('globals.php');
+function test_activation()
+{
+    create_code_table();
+}
+
+function add_download_filter($query_vars)
+{
+    $query_vars[] = 'download';
+    return $query_vars;
+}
+
+function add_download_template($template)
+{
+    if (get_query_var('download') == false || get_query_var('download') == '')
+        return $template;
+    return WP_PLUGIN_DIR . '/test-plugin/download-page-template.php';
+}
+
+function test_uninstall()
+{
+    flush_rewrite_rules();
+    remove_action('template_include', 'add_download_template');
+    remove_filter('query_vars', 'add_download_filter');
+}
+
+function add_serial_code_input($attr = [], $content = null, $tag = '')
+{
+    global $wp;
+    $_SESSION['shortcode_rendered_url']= home_url( $wp->request);
+    $serial_code = $_REQUEST['serial_code'];
+    $cpe = $_REQUEST['cpe'];
+    $output = //'<style type="text/css"> input { font-size: 17px; margin: 0 auto; height: 100%;} input[type="submit"] { font-size: 17px; }</style>
+            '<div style="display: flex;justify-content: center;">
+                <form action="?">
+                    <input style="border-width: 0; width: 230px; height: 55px;" type="text" id="serial_code_box" name="serial_code" placeholder="XXXXXXXXX">
+                    <input style="height: 100%;" type="submit" value="SPRAWDŹ">
+                </form>
+            </div>';
+    if (!isset($serial_code))
+        return $output;
+    if (!isset($cpe))
+        $cpe = 0;
+    $resp = is_serial_code_valid($serial_code);
+    switch($resp['status'])
+    {
+        case CODE_RESULT_EXPIRED:
+            $output .= '<br>' . invalid_serial_code_expired();
+            break;
+        case CODE_RESULT_ILLEGAL_CHARACTERS:
+            $output .= '<br>' . invalid_serial_code_illegal_characters();
+            break;
+        case CODE_RESULT_NOT_FOUND:
+            $output .= '<br>' . invalid_serial_code_not_found();
+            break;
+        case CODE_RESULT_VALID:
+            $package = $resp['package'];
+            $output .= '<script>';
+            $js_array = file(WP_PLUGIN_DIR . '/test-plugin/js/client-dialog-handler.js');
+            foreach ($js_array as $line)
+                $output .= $line;
+            $output .= '</script>
+                        <dialog id="dialog">' . valid_serial_code($serial_code, $package, $cpe) . 
+                            '<br><div style="text-align:center;"><button type="button" onclick="performClose()">ANULUJ</button></div>
+                        </dialog>';
+            break;
+        default:
+            break;
+    }
+
+    return $output;
+}
+/*
+function serial_code_validation($attr = [], $content = null, $tag = '')
+{
+    $serial_code = $_POST['serial_code'];
+    $certain_product_expired = $_REQUEST['cpe'];
+    $shared_package = null;
+    if ($certain_product_expired == 1)
+        return invalid_serial_code_certain_product_expired();
+    if ($serial_code == null)
+        return invalid_serial_code_illegal_characters();
+    if (!ctype_digit($serial_code))
+        return invalid_serial_code_illegal_characters();
+
+    $shared_package = get_package($serial_code);
+    if ($shared_package == -1)
+        return invalid_serial_code_expired();
+    
+    return valid_serial_code($serial_code, $shared_package);
+}
+*/
+
+register_activation_hook(__FILE__, 'test_activation');
+register_uninstall_hook(__FILE__, 'test_uninstall');
+add_shortcode('plugin-test', 'add_serial_code_input');
+
+add_action( 'init',  function() {
+    add_rewrite_rule('download/([^/]*)/?$', 'index.php?download=$matches[1]', 'top');
+} );
+
+add_filter('query_vars', 'add_download_filter');
+
+add_action('template_include', 'add_download_template');
