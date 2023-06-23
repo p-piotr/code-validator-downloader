@@ -19,5 +19,3 @@ logi z pobrań są zapisywane do bazy ale jeszcze nie wyświetlam ich na ekranie
 formie w przyszłości
 
 teraz to chyba tyle, jak coś to proszę o feedback itd.
-
-pozdrawiam, piotrek ;)
