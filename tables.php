@@ -35,6 +35,7 @@ function create_code_table()
         $sql = "CREATE TABLE $table_name_products (
             product_id INT NOT NULL AUTO_INCREMENT,
             product_name VARCHAR(128),
+            file_ext_name VARCHAR(128),
             file_url VARCHAR(512) NOT NULL,
             PRIMARY KEY(product_id)
             ) $charset;";
@@ -105,12 +106,12 @@ function add_dynamic_link($serial_code, $product_id, $dynamic_link)
     return true;
 }
 
-function add_product($product_name, $file_url)
+function add_product($product_name, $file_ext_name, $file_url)
 {
     global $wpdb, $table_name_products;
 
     if ($wpdb->insert($table_name_products,
-        array('product_name' => $product_name, 'file_url' => $file_url)) == false)
+        array('product_name' => $product_name, 'file_ext_name' => $file_ext_name, 'file_url' => $file_url)) == false)
         {
             //var_dump($wpdb->last_error);
             return false;

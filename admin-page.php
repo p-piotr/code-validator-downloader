@@ -27,6 +27,9 @@ function show_products_table()
                 <a>Nazwa produktu:</a>
                 <input type="text" size="32" name="product_name">
                 <br><br>
+                <a>Nazwa zewnętrzna pliku:</a>
+                <input type="text" size="32" name="file_ext_name">
+                <br><br>
                 <a>Ścieżka do pliku:</a>
                 <input type="text" size="128" name="file_url">
                 <br><br>
@@ -39,6 +42,7 @@ function show_products_table()
                 <tr>
                     <th>ID produktu</th>
                     <th>Nazwa produktu</th>
+                    <th>Zewnętrzna nazwa pliku</th>
                     <th>Ścieżka do pliku</th>
                 </tr>
                 <?php 
@@ -54,6 +58,7 @@ function show_products_table()
                             <tr>
                                 <td class="row"><?php echo $product->product_id ?></td>
                                 <td class="row"><?php echo $product->product_name ?></td>
+                                <td class="row"><?php echo $product->file_ext_name ?></td>
                                 <td class="row"><?php echo $product->file_url ?></td>
                                 <td class="td_button"><button type="button" class="own" onclick="edit_product(<?php echo $product->product_id ?>)">Edytuj</button></td>
                                 <td class="td_button">
@@ -189,6 +194,10 @@ function show_codes_table()
                 ?>
             </table>
             <div style="margin-top: 5px"><button class="own" onclick="add_code_dialog()">Dodaj</button></div>
+            <h4>Jeżeli status kodu jest aktywny mimo minięcia daty wygaśnięcia - nic nieporządanego się nie dzieje.<br>
+                Status kodu zostanie zmieniony na wygaśnięty w następnej próbie wykorzystania kodu, a klient<br>
+                otrzyma informację o jego wygaśnięciu.
+            </h4>
         </div>
     <?php
 }
@@ -217,6 +226,7 @@ function test_plugin_page_default()
             if ($action == 'add_product')
             {
                 $product_name = $_POST['product_name'];
+                $file_ext_name = $_POST['file_ext_name'];
                 $file_url = $_POST['file_url'];
                 if ($product_name !== null || $file_url !== null)
                 {
@@ -224,7 +234,7 @@ function test_plugin_page_default()
                     {
                         ?><div><strong style="color:red; font-size: 17px;">Błędne dane - nie można dodać produktu</strong></div><?php
                     }
-                    else if (add_product($product_name, $file_url))
+                    else if (add_product($product_name, $file_ext_name, $file_url))
                     {
                         ?><div><strong style="color:green; font-size: 17px">Dodawanie produktu powiodło się</strong></div><?php
                     }
@@ -386,6 +396,8 @@ function test_plugin_page_default()
             <h3>CODE_RESULT_EXPIRED</h3> - wyświetlany, gdy kod wygasł<br><br>
             <h3>CODE_RESULT_CPE</h3> - wyświetlany w oknie dialogowym, gdy przekroczono dozwoloną liczbę pobrań produktu z danego kodu
         </div>
+        <br><br>
+        <i style="font-size: 16px;">Wersja wtyczki: <strong>0.1.0</strong></i>
     <?php
 }
 
