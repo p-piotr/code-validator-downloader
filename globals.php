@@ -1,5 +1,7 @@
 <?php
 
+define('PLUGIN_VERSION', '0.1.0');
+
 define('PRODUCT_DOWNLOADS_AMOUNT_DEFAULT', 3);
 define('CODE_EXIPRY_TIME_SECONDS_DEFAULT', 7200);
 

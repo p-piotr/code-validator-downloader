@@ -397,7 +397,7 @@ function test_plugin_page_default()
             <h3>CODE_RESULT_CPE</h3> - wyświetlany w oknie dialogowym, gdy przekroczono dozwoloną liczbę pobrań produktu z danego kodu
         </div>
         <br><br>
-        <i style="font-size: 16px;">Wersja wtyczki: <strong>0.1.0</strong></i>
+        <i style="font-size: 16px;">Wersja wtyczki: <strong><?php echo PLUGIN_VERSION; ?></strong></i>
     <?php
 }
 
