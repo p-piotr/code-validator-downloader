@@ -35,7 +35,7 @@ function get_package($serial_code)
 {
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     require_once('tables.php');
-    global $wpdb, $table_name_codes, $code_expiry_time_seconds;
+    global $wpdb, $table_name_codes, $code_expiry_time_days;
 
     $sql = "SELECT * FROM $table_name_codes WHERE serial_code = $serial_code;";
     $resp = $wpdb->get_results($sql);
@@ -59,9 +59,9 @@ function get_package($serial_code)
     }
     else // $element->expires_at == null
     {
-        date_modify($date, '+' . strval($code_expiry_time_seconds) . 'seconds');
+        date_modify($date, '+' . strval($code_expiry_time_days) . 'day');
         $date_expires_at = date_format($date, 'Y-m-d H:i:s');
-        $sql = "UPDATE $table_name_codes SET expires_at = '" . $date_expires_at . "' WHERE serial_code = $serial_code;";
+        $sql = "UPDATE $table_name_codes SET expires_at = '$date_expires_at' WHERE serial_code = $serial_code;";
         dbDelta($sql);
     }
     return $element->package_reference;

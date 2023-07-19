@@ -12,7 +12,7 @@ function test_create_menu()
 function register_test_plugin_settings()
 {
     register_setting('test-plugin-settings-group', 'comments_file_location');
-    register_setting('test-plugin-settings-group', 'code_expiry_time_seconds');
+    register_setting('test-plugin-settings-group', 'code_expiry_time_days');
     register_setting('test-plugin-settings-group', 'product_downloads_amount');
 }
 
@@ -36,6 +36,27 @@ function show_products_table()
                 <input class="own" type="submit" value="Dodaj">
             </form>
         </dialog>
+        <dialog id="product_edit_dialog">
+            <a class="close-X" onclick="close_edit_product_dialog()">&#10006</a>
+            <br><br>
+            <form action="" method="POST">
+                <input type="text" name="action" value="edit_product" style="display:none">
+                <a>ID produktu:</a>
+                <span>&nbsp<strong style="font-size: 15px" id="product_id"></strong></span>
+                <input type="text" id="product_id_input" name="product_id" value="" style="display:none">
+                <br><br>
+                <a>Nazwa produktu:</a>
+                <input type="text" size="32" id="product_name_input" name="product_name">
+                <br><br>
+                <a>Nazwa zewnętrzna pliku:</a>
+                <input type="text" size="32" id="file_ext_name_input" name="file_ext_name">
+                <br><br>
+                <a>Ścieżka do pliku:</a>
+                <input type="text" size="128" id="file_url_input" name="file_url">
+                <br><br>
+                <input class="own" type="submit" value="Zatwierdź">
+            </form>
+        </dialog>
         <div>
             <h2>Produkty</h2>
             <table class="dataTable">
@@ -56,10 +77,10 @@ function show_products_table()
                     {
                         ?>
                             <tr>
-                                <td class="row"><?php echo $product->product_id ?></td>
-                                <td class="row"><?php echo $product->product_name ?></td>
-                                <td class="row"><?php echo $product->file_ext_name ?></td>
-                                <td class="row"><?php echo $product->file_url ?></td>
+                                <td class="row" id="product_productid_<?php echo $product->product_id ?>"><?php echo $product->product_id ?></td>
+                                <td class="row" id="product_productname_<?php echo $product->product_id ?>"><?php echo $product->product_name ?></td>
+                                <td class="row" id="product_fileextname_<?php echo $product->product_id ?>"><?php echo $product->file_ext_name ?></td>
+                                <td class="row" id="product_fileurl_<?php echo $product->product_id ?>"><?php echo $product->file_url ?></td>
                                 <td class="td_button"><button type="button" class="own" onclick="edit_product(<?php echo $product->product_id ?>)">Edytuj</button></td>
                                 <td class="td_button">
                                     <form action="" method="POST" onsubmit="return confirm('Czy jesteś pewny że chcesz usunąć \'<?php echo $product->product_name ?>\'? Ta operacja jest nieodwracalna!');">
@@ -95,6 +116,24 @@ function show_packages_table()
                 <input class="own" type="submit" value="Dodaj">
             </form>
         </dialog>
+        <dialog id="package_edit_dialog">
+            <a class="close-X" onclick="close_edit_package_dialog()">&#10006</a>
+            <br><br>
+            <form action="" method="POST">
+                <input type="text" name="action" value="edit_package" style="display:none">
+                <a>ID pakietu:</a>
+                <span>&nbsp<strong style="font-size: 15px" id="package_id"></strong></span>
+                <input type="text" id="package_id_input" name="package_id" value="" style="display:none">
+                <br><br>
+                <a>Nazwa pakietu:</a>
+                <input type="text" size="32" id="package_name_input" name="package_name">
+                <br><br>
+                <a>Zawarte produkty</a>
+                <input type="text" size="32" id="products_included_input" name="products_included">
+                <br><br>
+                <input class="own" type="submit" value="Zatwierdź">
+            </form>
+        </dialog>
         <div>
             <h2>Pakiety</h2>
             <table class="dataTable">
@@ -114,10 +153,10 @@ function show_packages_table()
                     {
                         ?>
                             <tr>
-                                <td class="row"><?php echo $package->package_id ?></td>
-                                <td class="row"><?php echo $package->package_name ?></td>
-                                <td class="row"><?php echo $package->products_included ?></td>
-                                <td class="td_button"><button class="own" onclick="edit_product(<?php echo $package->package_id ?>)">Edytuj</button></td>
+                                <td class="row" id="package_packageid_<?php echo $package->package_id ?>"><?php echo $package->package_id ?></td>
+                                <td class="row" id="package_packagename_<?php echo $package->package_id ?>"><?php echo $package->package_name ?></td>
+                                <td class="row" id="package_productsincluded_<?php echo $package->package_id ?>"><?php echo $package->products_included ?></td>
+                                <td class="td_button"><button class="own" onclick="edit_package(<?php echo $package->package_id ?>)">Edytuj</button></td>
                                 <td class="td_button">
                                     <form action="" method="POST" onsubmit="return confirm('Czy jesteś pewny że chcesz usunąć \'<?php echo $package->package_name ?>\'? Ta operacja jest nieodwracalna!');">
                                         <input type="text" name="action" value="delete_package" style="display:none">
@@ -156,6 +195,25 @@ function show_codes_table()
                 <input class="own" type="submit" value="Dodaj">
             </form>
         </dialog>
+        <dialog id="code_edit_dialog">
+            <a class="close-X" onclick="close_edit_code_dialog()">&#10006</a>
+            <br><br>
+            <form action="" method="POST">
+                <input type="text" name="action" value="edit_code" style="display:none">
+                <a>Kod seryjny</a>
+                <span>&nbsp<strong style="font-size: 15px" id="serial_code"></strong></span>
+                <input type="text" id="serial_code_input" name="serial_code" value="" style="display:none">
+                <br><br>
+                <a>Odwołanie do pakietu</a>
+                <input type="text" size="2" id = "package_reference_input" name="package_reference">
+                <br><br>
+                <a>Wygasa za (domyślnie NULL)</a>
+                <input type="text" size="20" id = "expires_at_input" name="expires_at" value="NULL">
+                <a>Status (domyślnie active)</a>
+                <input type="text" size="10" id = "status_input" name="status" value="active">
+                <input class="own" type="submit" value="Zatwierdź">
+            </form>
+        </dialog>
         <div>
             <h2>Kody seryjne</h2>
             <table class="dataTable">
@@ -176,11 +234,11 @@ function show_codes_table()
                     {
                         ?>
                             <tr>
-                                <td class="row"><?php echo $code->serial_code ?></td>
-                                <td class="row"><?php echo $code->package_reference ?></td>
-                                <td class="row"><?php echo $code->expires_at ?></td>
-                                <td class="row"><?php echo $code->status ?></td>
-                                <td class="td_button"><button class="own" onclick="edit_product(<?php echo $code->serial_code ?>)">Edytuj</button></td>
+                                <td class="row" id="code_serialcode_<?php echo $code->serial_code ?>"><?php echo $code->serial_code ?></td>
+                                <td class="row" id="code_packagereference_<?php echo $code->serial_code ?>"><?php echo $code->package_reference ?></td>
+                                <td class="row" id="code_expiresat_<?php echo $code->serial_code ?>"><?php echo $code->expires_at ?></td>
+                                <td class="row" id="code_status_<?php echo $code->serial_code ?>"><?php echo $code->status ?></td>
+                                <td class="td_button"><button class="own" onclick="edit_code(<?php echo $code->serial_code ?>)">Edytuj</button></td>
                                 <td class="td_button">
                                     <form action="" method="POST" onsubmit="return confirm('Czy jesteś pewny że chcesz usunąć \'<?php echo $code->serial_code ?>\'? Ta operacja jest nieodwracalna!');">
                                         <input type="text" name="action" value="delete_code" style="display:none">
@@ -244,6 +302,28 @@ function test_plugin_page_default()
                     }
                 }
             }
+            else if ($action == 'edit_product')
+            {
+                $product_id = $_POST['product_id'];
+                $product_name = $_POST['product_name'];
+                $file_ext_name = $_POST['file_ext_name'];
+                $file_url = $_POST['file_url'];
+                if ($product_name !== null || $file_url !== null)
+                {
+                    if ($product_name === '' || $file_ext_name === '' || $file_url === '')
+                    {
+                        ?><div><strong style="color:red; font-size: 17px;">Błędne dane - nie można edytować produktu</strong></div><?php
+                    }
+                    else if (edit_product($product_id, $product_name, $file_ext_name, $file_url))
+                    {
+                        ?><div><strong style="color:green; font-size: 17px">Edytowanie produktu powiodło się</strong></div><?php
+                    }
+                    else
+                    {
+                        ?><div><strong style="color:red; font-size: 17px">Błąd edycji produktu - żaden parametr nie został zmieniony lub wystąpił nieznay błąd</strong></div><?php
+                    }
+                }
+            }
             else if ($action == 'delete_product')
             {
                 $product_id = $_POST['product_id'];
@@ -278,6 +358,24 @@ function test_plugin_page_default()
                     {
                         ?><div><strong style="color:red; font-size: 17px">Nie udało się dodać pakietu</strong></div><?php
                     }
+                }
+            }
+            else if ($action == 'edit_package')
+            {
+                $package_id = $_POST['package_id'];
+                $package_name = $_POST['package_name'];
+                $products_included = $_POST['products_included'];
+                if ($package_name === '' || $products_included === '')
+                {
+                    ?><div><strong style="color:red; font-size: 17px;">Błędne dane - nie można edytować pakietu</strong></div><?php
+                }
+                else if (edit_package($package_id, $package_name, $products_included))
+                {
+                    ?><div><strong style="color:green; font-size: 17px">Edytowanie pakietu powiodło się</strong></div><?php
+                }
+                else
+                {
+                    ?><div><strong style="color:red; font-size: 17px">Błąd edycji pakietu - żaden parametr nie został zmieniony lub wystąpił nieznay błąd</strong></div><?php
                 }
             }
             else if ($action == 'delete_package')
@@ -320,6 +418,27 @@ function test_plugin_page_default()
                     }
                 }
             }
+            else if ($action == 'edit_code')
+            {
+                $serial_code = $_POST['serial_code'];
+                $package_reference = $_POST['package_reference'];
+                $expires_at = $_POST['expires_at'];
+                $status = $_POST['status'];
+                if ($expires_at === '')
+                    $expires_at = null;
+                if ($serial_code === '' || $package_reference === '' || $status === '')
+                {
+                    ?><div><strong style="color:red; font-size: 17px;">Błędne dane - nie można edytować kodu</strong></div><?php
+                }
+                else if (edit_code($serial_code, $package_reference, $expires_at, $status))
+                {
+                    ?><div><strong style="color:green; font-size: 17px">Edytowanie kodu powiodło się</strong></div><?php
+                }
+                else
+                {
+                    ?><div><strong style="color:red; font-size: 17px">Błąd edycji kodu - żaden parametr nie został zmieniony lub wystąpił nieznay błąd</strong></div><?php
+                }
+            }
             else if ($action == 'delete_code')
             {
                 $serial_code = $_POST['serial_code'];
@@ -351,11 +470,11 @@ function test_plugin_page_default()
                 <a href="#comments-help">Zobacz wyjaśnienie</a>
             </div>
             <div style="margin-bottom: 15px; margin-right: 15px;">
-                Ważność kodu od pierwszego wpisania, <strong>w sekundach</strong>
+                Ważność kodu od pierwszego wpisania, <strong>w dobach</strong>
                 <br>
-                <input size="8" type="text" name="code_expiry_time_seconds" value="<?php echo esc_attr(get_option('code_expiry_time_seconds')); ?>"/>
+                <input size="8" type="text" name="code_expiry_time_days" value="<?php echo esc_attr(get_option('code_expiry_time_days')); ?>"/>
                 <br>
-                <i>Domyślnie: <?php require_once('globals.php'); echo CODE_EXIPRY_TIME_SECONDS_DEFAULT ?></i>
+                <i>Domyślnie: <?php require_once('globals.php'); echo CODE_EXIPRY_TIME_DAYS_DEFAULT ?></i>
             </div>
             <div style="margin-bottom: 15px; margin-right: 15px;">
                 Ilość pobrań każdego produktu z osobna z jednego kodu

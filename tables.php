@@ -119,6 +119,20 @@ function add_product($product_name, $file_ext_name, $file_url)
     return true;
 }
 
+function edit_product($product_id, $product_name, $file_ext_name, $file_url)
+{
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+    global $wpdb, $table_name_products;
+
+    $result = $wpdb->update($table_name_products, array( 'product_name' => $product_name,
+        'file_ext_name' => $file_ext_name, 'file_url' => $file_url ), 
+        array('product_id' => $product_id));
+    if ($result == false)
+        return false;
+    return true;
+}
+
 function delete_product($product_id)
 {
     global $wpdb, $table_name_products;
@@ -145,6 +159,20 @@ function add_package($package_name, $products_included)
     return true;
 }
 
+function edit_package($package_id, $package_name, $products_included)
+{
+    global $wpdb, $table_name_packages;
+
+    $result = $wpdb->update($table_name_packages, array( 'package_name' => $package_name, 
+        'products_included' => $products_included ), array( 'package_id' => $package_id ));
+    if ($result == false)
+    {
+        var_dump($wpdb->last_error);
+        return false;
+    }
+    return true;
+}
+
 function delete_package($package_id)
 {
     global $wpdb, $table_name_packages;
@@ -168,6 +196,17 @@ function add_code($serial_code, $package_reference, $expires_at, $status)
             //var_dump($wpdb->last_error);
             return false;
         }
+    return true;
+}
+
+function edit_code($serial_code, $package_reference, $expires_at, $status)
+{
+    global $wpdb, $table_name_codes;
+
+    $result = $wpdb->update($table_name_codes, array( 'package_reference' => $package_reference, 
+        'expires_at' => $expires_at, 'status' => $status ), array( 'serial_code' => $serial_code ));
+    if ($result == false)
+        return false;
     return true;
 }
 

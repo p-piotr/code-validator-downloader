@@ -3,21 +3,21 @@
 define('PLUGIN_VERSION', '0.1.0');
 
 define('PRODUCT_DOWNLOADS_AMOUNT_DEFAULT', 3);
-define('CODE_EXIPRY_TIME_SECONDS_DEFAULT', 7200);
+define('CODE_EXIPRY_TIME_DAYS_DEFAULT', 1);
 
 global $website_main_page_url, $product_downloads_amount;
 $website_main_page_url = $_SERVER['HTTP_HOST'] . '/testowa/zk';
 $product_downloads_amount = 3;
 
-global $code_expiry_time_seconds;
-$code_expiry_time_seconds = 7200;
+global $code_expiry_time_days;
+$code_expiry_time_days = 1;
 
 global $table_name_codes;
 global $table_name_products;
 global $table_name_packages;
 global $table_name_dynamic_links;
 global $table_name_downloads;
-global $code_expiry_time_seconds;
+global $code_expiry_time_days;
 
 $table_name_codes = $wpdb->prefix . 'serial_codes_p';
 $table_name_products = $wpdb->prefix . 'products_p';
@@ -57,11 +57,11 @@ if (file_exists($comments_file))
     }
 }
 
-$cets = esc_attr(get_option('code_expiry_time_seconds'));
+$cets = esc_attr(get_option('code_expiry_time_days'));
 if (is_numeric($cets))
-    $code_expiry_time_seconds = intval($cets);
+    $code_expiry_time_days = intval($cets);
 else
-    $code_expiry_time_seconds = CODE_EXIPRY_TIME_SECONDS_DEFAULT;
+    $code_expiry_time_days = CODE_EXIPRY_TIME_DAYS_DEFAULT;
 
 $pda = esc_attr(get_option('product_downloads_amount'));
 if (is_numeric($pda))
