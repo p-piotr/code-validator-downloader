@@ -12,35 +12,47 @@ require_once('serial-code-status.php');
 require_once('serial-code-response.php');
 require_once('admin-page.php');
 require_once('globals.php');
+
 function test_activation()
 {
     create_code_table();
 }
 
-function add_download_filter($query_vars)
+function add_filter_download($query_vars)
 {
     $query_vars[] = 'download';
     return $query_vars;
 }
 
-function add_download_template($template)
+function add_filter_check($query_vars)
 {
-    if (get_query_var('download') == false || get_query_var('download') == '')
+    $query_vars[] = 'check';
+    return $query_vars;
+}
+
+function add_templates($template)
+{
+    $var_download = get_query_var('download');
+    $var_check = get_query_var('check');
+    if ($var_download == false && $var_check == false)
         return $template;
-    return WP_PLUGIN_DIR . '/test-plugin/download-page-template.php';
+    if ($var_download != false)
+        return WP_PLUGIN_DIR . '/test-plugin/download-page-template.php';
+    return WP_PLUGIN_DIR . '/test-plugin/check-code-template.php';
 }
 
 function test_uninstall()
 {
     flush_rewrite_rules();
-    remove_action('template_include', 'add_download_template');
-    remove_filter('query_vars', 'add_download_filter');
+    remove_action('template_include', 'add_templates');
+    remove_filter('query_vars', 'add_filter_download');
+    remove_filter('query_vars', 'add_filter_check');
 }
 
 function add_serial_code_input($attr = [], $content = null, $tag = '')
 {
     global $wp;
-    $_SESSION['shortcode_rendered_url']= home_url( $wp->request);
+    $_SESSION['shortcode_rendered_url'] = home_url($wp->request);
     $serial_code = $_REQUEST['serial_code'];
     $cpe = $_REQUEST['cpe'];
     $output = //'<style type="text/css"> input { font-size: 17px; margin: 0 auto; height: 100%;} input[type="submit"] { font-size: 17px; }</style>
@@ -110,8 +122,10 @@ add_shortcode('plugin-test', 'add_serial_code_input');
 
 add_action( 'init',  function() {
     add_rewrite_rule('download/([^/]*)/?$', 'index.php?download=$matches[1]', 'top');
+    add_rewrite_rule('check?([^/]*)/?$', 'index.php?check=check/$matches[1]', 'top');
 } );
 
-add_filter('query_vars', 'add_download_filter');
+add_filter('query_vars', 'add_filter_download');
+add_filter('query_vars', 'add_filter_check');
 
-add_action('template_include', 'add_download_template');
+add_action('template_include', 'add_templates');
