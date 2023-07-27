@@ -1,12 +1,11 @@
 <?php
 
-define('PLUGIN_VERSION', '0.2.0');
+define('PLUGIN_VERSION', '0.3.0');
 
 define('PRODUCT_DOWNLOADS_AMOUNT_DEFAULT', 3);
 define('CODE_EXIPRY_TIME_DAYS_DEFAULT', 1);
 
-global $website_main_page_url, $product_downloads_amount;
-$website_main_page_url = $_SERVER['HTTP_HOST'] . '/testowa/zk';
+global $product_downloads_amount;
 $product_downloads_amount = 3;
 
 global $code_expiry_time_days;
@@ -29,6 +28,7 @@ define('CODE_RESULT_VALID', 0);
 define('CODE_RESULT_EXPIRED', 1);
 define('CODE_RESULT_NOT_FOUND', 2);
 define('CODE_RESULT_ILLEGAL_CHARACTERS', 3);
+// CODE_RESULT_CPE
 
 define('CODE_RESULT_EXPIRED_DEFAULT_COMMENT', '<a style="font-size: 20px; color: #FFFFFF">Twój numer seryjny wygasł</a>');
 define('CODE_RESULT_NOT_FOUND_DEFAULT_COMMENT', '<a style="font-size: 20px; color: #FFFFFF">Twój numer seryjny nie znajduje się w bazie</a>');
