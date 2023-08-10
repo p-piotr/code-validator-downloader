@@ -260,6 +260,51 @@ function show_codes_table()
     <?php
 }
 
+function show_downloads_table()
+{
+    ?>
+        <table class="dataTable">
+            <tr>
+                <th>ID pobrania</th>
+                <th>Kod seryjny</th>
+                <th>ID produktu</th>
+                <th>IP gościa</th>
+                <th>Data</th>
+                <th>User Agent</th>
+                <th>Flaga CTD</th>
+            </tr>
+            <?php 
+                require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+                require_once('globals.php');
+                global $wpdb, $table_name_downloads;
+                $sql = "SELECT * FROM $table_name_downloads;";
+                $downloads = $wpdb->get_results($sql);
+                foreach ($downloads as $download)
+                {
+                    ?>
+                        <tr>
+                            <td class="row"><?php echo $download->id ?></td>
+                            <td class="row"><?php echo $download->serial_code ?></td>
+                            <td class="row"><?php echo $download->product_id ?></td>
+                            <td class="row"><?php echo $download->visitor_ip ?></td>
+                            <td class="row"><?php echo $download->date_time ?></td>
+                            <td class="row"><?php echo $download->user_agent ?></td>
+                            <td class="row"><?php echo $download->ctd ?></td>
+                        </tr>
+                    <?php
+                }
+            ?>
+        </table>
+        <div style="margin-top:15px;">
+            <span>
+                <strong>Flaga CTD</strong> - wewnętrzna flaga skryptu umożliwiająca filtrowanie rekordów pobrań pod kątem zaliczania ich do "poprawnych" pobrań
+                <br>W przypadku sprawdzania przekroczenia limitu pobrań przez klienta, liczone są jedynie rekordy z flagą CTD o wartości 1; zmiana jej wartości na 0
+                    de facto umożliwia dalsze pobieranie pliku do ustalonego limitu, bez konieczności usuwania rekordów pobrań.
+            </span>
+        </div>
+    <?php
+}
+
 function test_plugin_page_default()
 {
     ?>
@@ -281,7 +326,12 @@ function test_plugin_page_default()
         <?php
             require_once('tables.php');
             $action = $_POST['action'];
-            if ($action == 'add_product')
+            if ($action == 'show_downloads_table')
+            {
+                show_downloads_table();
+                die();
+            }
+            else if ($action == 'add_product')
             {
                 $product_name = $_POST['product_name'];
                 $file_ext_name = $_POST['file_ext_name'];
@@ -496,7 +546,14 @@ function test_plugin_page_default()
         <div id="codes_table">
             <?php show_codes_table() ?>
         </div>
-
+        <div id="show_downloads_table">
+            <div style="margin-top: 5px">
+                <form action="" method="POST">
+                    <input type="text" name="action" value="show_downloads_table" style="display:none">
+                    <input type="submit" name="submit" class="button button-primary" value="Zobacz tabelę pobrań">
+                </form>
+            </div>
+        </div>
         <div id="comments-help">
             <h2>Plik z komentarzami - wyjaśnienie</h2>
             Plik z komentarzami, jak zostało napisane wyżej, jest to plik (tekstowy .txt) zawierający komentarze do wyświetlenia klientowi.

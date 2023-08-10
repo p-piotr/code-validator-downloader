@@ -10,6 +10,8 @@ global $main_page_directory;
 $serial_code = $_GET['ser'];
 $check = $_GET['chk'];
 $log = $_GET['log'];
+if ($log != '0')
+    $log = '1';
 
 if ($check == '1')
 {
@@ -36,7 +38,7 @@ if ($check == '1')
                 $dynamic_path = get_dynamic_path($serial_code, $product->product_id);
                 $return_array['products'][$product->product_id] = 
                     array('product_name' => $product->product_name,
-                        'download_link' => get_site_url() . "/download/" . $dynamic_path . "?api=1");
+                        'download_link' => get_site_url() . "/download/" . $dynamic_path . "?api=1&log=" . $log);
             }
             break;
     }

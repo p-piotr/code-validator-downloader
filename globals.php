@@ -1,6 +1,6 @@
 <?php
 
-define('PLUGIN_VERSION', '0.3.0');
+define('PLUGIN_VERSION', '0.4.0');
 
 define('PRODUCT_DOWNLOADS_AMOUNT_DEFAULT', 3);
 define('CODE_EXIPRY_TIME_DAYS_DEFAULT', 1);

@@ -6,6 +6,7 @@ require_once('download.php');
 
 $path = get_query_var('download'); // dynamiczna sciezka dostepu
 $api = $_REQUEST['api'];
+$log = $_REQUEST['log'];
 $check_result = check_path($path, !$api);
 if ($check_result['status'] == 'expired' || $check_result['status'] == 'internal_error' || $check_result['status'] == 'invalid_url')
 {
@@ -36,6 +37,7 @@ else
     $product_id = $check_result['product_id'];
     $file_path = $check_result['file_path'];
     $file_ext_name = $check_result['file_ext_name'];
-    add_download_log($dynamic_path, $serial_code, $product_id);
+    if ($log == '1')
+        add_download_log($dynamic_path, $serial_code, $product_id);
     send_file($file_path, $file_ext_name);
 }
