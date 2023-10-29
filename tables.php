@@ -301,6 +301,7 @@ function add_code_from_file($file_path)
         $return_array['result'] = false;
         $return_array['reason'] = 'wrong_records';
         $return_array['error_lines'] = $error_lines;
+        $return_array['success_lines_number'] = $n - 1 - count($error_lines);
         return $return_array;
     }
 }

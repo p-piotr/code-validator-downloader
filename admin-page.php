@@ -508,7 +508,7 @@ function test_plugin_page_default()
                         else
                         {
                             ?>
-                                <form id="add_code_from_file_confirmation_form" action="" method="POST" onsubmit="return confirm('Podany plik zawiera <?php echo $return_array['lines']; if ($return_array['lines'] < 5) echo ' rekordy'; else echo ' rekordów'; ?>. Czy jesteś pewny, że chcesz je dodać?');">
+                                <form id="add_code_from_file_confirmation_form" action="" method="POST" onsubmit="return confirm('Podany plik zawiera <?php $i = $return_array['lines']; echo($i); if ($i == 1) echo(' rekord'); else if ($i > 0 && $i < 5) echo(' rekordy'); else echo(' rekordów'); ?>. Czy jesteś pewny, że chcesz je dodać?');">
                                     <input type="text" name="action" value="add_code_from_file" style="display:none">
                                     <input type="text" name="file_path" value="<?php echo $file_path ?>" style="display:none">
                                     <input style="display:none" type="submit" value="Dodaj">
@@ -557,6 +557,27 @@ function test_plugin_page_default()
                                                 echo('<span>Linia nr ' . $line[0] . ': serial_code = ' . $line[1] . '; package_reference = ' . $line[2] . '; expires_at = ' . $line[3] . '; status = ' . $line[4] . '</span><br>');
                                             }
                                         ?>
+                                    </div>
+                                    <div>
+                                        <?php
+                                            $i = $return_array['success_lines_number'];
+                                            if ($i == 0)
+                                            {
+                                                ?><strong style="color:#FF8C00; font-size: 17px"><?php
+                                            }
+                                            else
+                                            {
+                                                ?><strong style="color:green; font-size: 17px;"><?php
+                                            }
+
+                                            echo($i);
+                                            if ($i == 1) 
+                                                echo(' rekord');
+                                            else if ($i > 0 && $i < 5)
+                                                echo(' rekordy');
+                                            else echo(' rekordów');
+                                        ?>
+                                        dodano pomyślnie</strong>
                                     </div>
                                 <?php
                             }

@@ -1,4 +1,2 @@
-123;1;NULL;active
-1234;2;2025-09-23 22:48:56;active
-12345;2;NULL;expired
-12;1;NULL;active
+1;1;NULL;active
+87;2;NULL;active
