@@ -221,8 +221,6 @@ function add_code($serial_code, $package_reference, $expires_at, $status)
     return true;
 }
 
-<<<<<<< HEAD
-=======
 function check_code_from_file($file_path)
 {
     global $wpdb, $table_name_codes;
@@ -307,7 +305,6 @@ function add_code_from_file($file_path)
     }
 }
 
->>>>>>> 3b3e8aa (0.5.0)
 function edit_code($serial_code, $package_reference, $expires_at, $status)
 {
     global $wpdb, $table_name_codes;

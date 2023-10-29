@@ -43,18 +43,11 @@ function add_templates($template)
 
 function test_uninstall()
 {
-<<<<<<< HEAD
-    flush_rewrite_rules();
-    remove_action('template_include', 'add_templates');
-    remove_filter('query_vars', 'add_filter_download');
-    remove_filter('query_vars', 'add_filter_check');
-=======
     remove_action('template_include', 'add_templates');
     remove_filter('query_vars', 'add_filter_download');
     remove_filter('query_vars', 'add_filter_check');
     flush_rewrite_rules();
     remove_shortcode('plugin-test');
->>>>>>> 3b3e8aa (0.5.0)
 }
 
 function add_serial_code_input($attr = [], $content = null, $tag = '')
@@ -132,10 +125,7 @@ add_shortcode('plugin-test', 'add_serial_code_input');
 add_action( 'init',  function() {
     add_rewrite_rule('download/([^/]*)/?$', 'index.php?download=$matches[1]', 'top');
     add_rewrite_rule('check?([^/]*)/?$', 'index.php?check=check/$matches[1]', 'top');
-<<<<<<< HEAD
-=======
     flush_rewrite_rules();
->>>>>>> 3b3e8aa (0.5.0)
 } );
 
 add_filter('query_vars', 'add_filter_download');

@@ -195,8 +195,6 @@ function show_codes_table()
                 <input class="own" type="submit" value="Dodaj">
             </form>
         </dialog>
-<<<<<<< HEAD
-=======
         <dialog id="code_add_from_file_dialog">
             <a class="close-X" onclick="close_add_code_from_file_dialog()">&#10006</a>
             <br><br>
@@ -207,7 +205,6 @@ function show_codes_table()
                 <input class="own" type="submit" value="Dodaj">
             </form>
         </dialog>
->>>>>>> 3b3e8aa (0.5.0)
         <dialog id="code_edit_dialog">
             <a class="close-X" onclick="close_edit_code_dialog()">&#10006</a>
             <br><br>
@@ -264,15 +261,11 @@ function show_codes_table()
                     }
                 ?>
             </table>
-<<<<<<< HEAD
-            <div style="margin-top: 5px"><button class="own" onclick="add_code_dialog()">Dodaj</button></div>
-=======
             <div style="margin-top: 5px">
                 <button class="own" onclick="add_code_dialog()">Dodaj</button>
                 <button style="margin-left: 5px" class="own" onclick="add_codes_from_file_dialog()">Dodaj z pliku</button>
                 <a style="margin-left: 5px" href="#add-code-from-file-help">Dodawanie kodów z pliku - zobacz wyjaśnienie</a>
             </div>
->>>>>>> 3b3e8aa (0.5.0)
             <h4>Jeżeli status kodu jest aktywny mimo minięcia daty wygaśnięcia - nic nieporządanego się nie dzieje.<br>
                 Status kodu zostanie zmieniony na wygaśnięty w następnej próbie wykorzystania kodu, a klient<br>
                 otrzyma informację o jego wygaśnięciu.
@@ -489,8 +482,6 @@ function test_plugin_page_default()
                     }
                 }
             }
-<<<<<<< HEAD
-=======
             else if ($action == 'add_code_from_file_check')
             {
                 $file_path = $_POST['file_path'];
@@ -577,7 +568,6 @@ function test_plugin_page_default()
                     }
                 }
             }
->>>>>>> 3b3e8aa (0.5.0)
             else if ($action == 'edit_code')
             {
                 $serial_code = $_POST['serial_code'];
@@ -664,11 +654,6 @@ function test_plugin_page_default()
                 </form>
             </div>
         </div>
-<<<<<<< HEAD
-        <div id="comments-help">
-            <h2>Plik z komentarzami - wyjaśnienie</h2>
-            Plik z komentarzami, jak zostało napisane wyżej, jest to plik (tekstowy .txt) zawierający komentarze do wyświetlenia klientowi.
-=======
         <div id="add-code-from-file-help">
             <h2>Dodawanie kodów z pliku - wyjaśnienie</h2>
             Ścieżka do pliku z kodami musi być absolutna względem całego systemu plików, tzn. musi zaczynać się od katalogu "/home".
@@ -698,7 +683,6 @@ function test_plugin_page_default()
             <h2>Plik z komentarzami - wyjaśnienie</h2>
             Plik z komentarzami, jak zostało napisane wyżej, jest to plik (tekstowy .txt) zawierający komentarze do wyświetlenia klientowi.
             Ścieżka do tego pliku - podobnie jak do pliku z kodami - musi być absolutna względem całego systemu plików (wyjaśnienie wyżej)
->>>>>>> 3b3e8aa (0.5.0)
             <br>
             Struktura tego pliku wygląda następująco: każda linia zawiera oddzielny komentarz, sformatowany w postaci ID komentarza oraz 
             jego treści (razem ze stylami) oddzielonych tyldą, oto przykład:

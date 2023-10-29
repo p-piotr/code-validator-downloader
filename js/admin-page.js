@@ -3,27 +3,21 @@ function add_product_dialog()
     document.getElementById('product_add_dialog').showModal();
 }
 
-<<<<<<< HEAD
-=======
 function add_codes_from_file_dialog()
 {
     document.getElementById('code_add_from_file_dialog').showModal();
 }
 
->>>>>>> 3b3e8aa (0.5.0)
 function close_add_product_dialog()
 {
     document.getElementById('product_add_dialog').close();
 }
 
-<<<<<<< HEAD
-=======
 function close_add_code_from_file_dialog()
 {
     document.getElementById('code_add_from_file_dialog').close();
 }
 
->>>>>>> 3b3e8aa (0.5.0)
 function add_package_dialog()
 {
     document.getElementById('package_add_dialog').showModal();
@@ -100,9 +94,6 @@ function edit_code(serial_code)
 function close_edit_code_dialog()
 {
     document.getElementById('code_edit_dialog').close();
-<<<<<<< HEAD
-}
-=======
 }
 
 function triggerSubmitEventAddCodeFromText()
@@ -119,4 +110,3 @@ function scrollToTop()
 
 window.addEventListener ? window.addEventListener("load", scrollToTop, false) : 
 window.attachEvent && window.attachEvent("onload", scrollToTop);
->>>>>>> 3b3e8aa (0.5.0)
