@@ -221,6 +221,93 @@ function add_code($serial_code, $package_reference, $expires_at, $status)
     return true;
 }
 
+<<<<<<< HEAD
+=======
+function check_code_from_file($file_path)
+{
+    global $wpdb, $table_name_codes;
+    $return_array = array();
+    $file = fopen($file_path, 'r');
+    $lines = 0;
+    if ($file == false)
+    {
+        $return_array['result'] = false;
+        $return_array['reason'] = 'cannot_open_file';
+        return $return_array;
+    }
+    while (!feof($file))
+    {
+        $line = fgets($file);
+        $code_params = explode(';', $line);
+        if (count($code_params) != 4)
+        {
+            fclose($file);
+            $return_array['result'] = false;
+            $return_array['reason'] = 'invalid_format';
+            return $return_array;
+        }
+        $lines++;
+    }
+    fclose($file);
+    $return_array['result'] = true;
+    $return_array['lines'] = $lines;
+    return $return_array;
+}
+
+function add_code_from_file($file_path)
+{
+    global $wpdb, $table_name_codes;
+    $return_array = array();
+    $file = fopen($file_path, 'r');
+    if ($file == false)
+    {
+        $return_array['result'] = false;
+        $return_array['reason'] = 'cannot_open_file';
+        return $return_array;
+    }
+    
+    $n = 1;
+    $error_lines = array();
+    while (!feof($file))
+    {   $single_code_array = array();
+        $line = fgets($file);
+        $code_params = explode(';', $line);
+        if (count($code_params) != 4)
+        {
+            fclose($file);
+            $return_array['result'] = false;
+            $return_array['reason'] = 'invalid_format';
+        }
+        $single_code_array['serial_code'] = intval($code_params[0]);
+        $single_code_array['package_reference'] = intval($code_params[1]);
+        if ($code_params[2] == 'NULL')
+            $single_code_array['expires_at'] = null;
+        else $single_code_array['expires_at'] = trim($code_params[2]);
+        $single_code_array['status'] = trim($code_params[3]);
+
+        if (add_code($single_code_array['serial_code'], $single_code_array['package_reference'], 
+            $single_code_array['expires_at'], $single_code_array['status']) == false)
+        {
+            array_push($error_lines, array($n, $single_code_array['serial_code'], $single_code_array['package_reference'], 
+                $code_params[2], $single_code_array['status']));
+        }
+        $n++;
+    }
+    if (count($error_lines) == 0)
+    {
+        $return_array['result'] = true;
+        return $return_array;
+    }
+    else
+    {
+        $return_array['result'] = false;
+        $return_array['reason'] = 'wrong_records';
+        $return_array['error_lines'] = $error_lines;
+        return $return_array;
+    }
+}
+
+>>>>>>> 3b3e8aa (0.5.0)
 function edit_code($serial_code, $package_reference, $expires_at, $status)
 {
     global $wpdb, $table_name_codes;

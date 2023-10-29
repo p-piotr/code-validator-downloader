@@ -195,6 +195,19 @@ function show_codes_table()
                 <input class="own" type="submit" value="Dodaj">
             </form>
         </dialog>
+<<<<<<< HEAD
+=======
+        <dialog id="code_add_from_file_dialog">
+            <a class="close-X" onclick="close_add_code_from_file_dialog()">&#10006</a>
+            <br><br>
+            <form action="" method="POST">
+                <input type="text" name="action" value="add_code_from_file_check" style="display:none">
+                <a>Ścieżka do pliku</a>
+                <input type="text" size="128" name="file_path">
+                <input class="own" type="submit" value="Dodaj">
+            </form>
+        </dialog>
+>>>>>>> 3b3e8aa (0.5.0)
         <dialog id="code_edit_dialog">
             <a class="close-X" onclick="close_edit_code_dialog()">&#10006</a>
             <br><br>
@@ -251,7 +264,15 @@ function show_codes_table()
                     }
                 ?>
             </table>
+<<<<<<< HEAD
             <div style="margin-top: 5px"><button class="own" onclick="add_code_dialog()">Dodaj</button></div>
+=======
+            <div style="margin-top: 5px">
+                <button class="own" onclick="add_code_dialog()">Dodaj</button>
+                <button style="margin-left: 5px" class="own" onclick="add_codes_from_file_dialog()">Dodaj z pliku</button>
+                <a style="margin-left: 5px" href="#add-code-from-file-help">Dodawanie kodów z pliku - zobacz wyjaśnienie</a>
+            </div>
+>>>>>>> 3b3e8aa (0.5.0)
             <h4>Jeżeli status kodu jest aktywny mimo minięcia daty wygaśnięcia - nic nieporządanego się nie dzieje.<br>
                 Status kodu zostanie zmieniony na wygaśnięty w następnej próbie wykorzystania kodu, a klient<br>
                 otrzyma informację o jego wygaśnięciu.
@@ -468,6 +489,95 @@ function test_plugin_page_default()
                     }
                 }
             }
+<<<<<<< HEAD
+=======
+            else if ($action == 'add_code_from_file_check')
+            {
+                $file_path = $_POST['file_path'];
+                if ($file_path !== null)
+                {
+                    if ($file_path === '')
+                    {
+                        ?><div><strong style="color:red; font-size: 17px;">Błędna ścieżka do pliku - pole nie może być puste</strong></div><?php
+                    }
+                    else
+                    {
+                        $return_array = check_code_from_file($file_path);
+                        if ($return_array['result'] == false)
+                        {
+                            if ($return_array['reason'] == 'invalid_format')
+                            {
+                                ?><div><strong style="color:red; font-size: 17px;">Błędny format pliku - niekopmletne lub zbędne dane</strong></div><?php
+                            }
+                            else if ($return_array['reason'] == 'cannot_open_file')
+                            {
+                                ?><div><strong style="color:red; font-size: 17px;">Nie można otworzyć podanego pliku</strong></div><?php
+                            }
+                        }
+                        else
+                        {
+                            ?>
+                                <form id="add_code_from_file_confirmation_form" action="" method="POST" onsubmit="return confirm('Podany plik zawiera <?php echo $return_array['lines']; if ($return_array['lines'] < 5) echo ' rekordy'; else echo ' rekordów'; ?>. Czy jesteś pewny, że chcesz je dodać?');">
+                                    <input type="text" name="action" value="add_code_from_file" style="display:none">
+                                    <input type="text" name="file_path" value="<?php echo $file_path ?>" style="display:none">
+                                    <input style="display:none" type="submit" value="Dodaj">
+                                </form>
+                                <script>
+                                    window.addEventListener ? window.addEventListener("load", triggerSubmitEventAddCodeFromText, false) : 
+                                        window.attachEvent && window.attachEvent("onload", triggerSubmitEventAddCodeFromText);
+                                </script>
+                            <?php
+                        }
+                    }
+                }
+            }
+            else if ($action == 'add_code_from_file')
+            {
+                $file_path = $_POST['file_path'];
+                if ($file_path !== null)
+                {
+                    if ($file_path === '')
+                    {
+                        ?><div><strong style="color:red; font-size: 17px;">Błędna ścieżka do pliku - pole nie może być puste</strong></div><?php
+                    }
+                    else
+                    {
+                        $return_array = add_code_from_file($file_path);
+                        if ($return_array['result'] == false)
+                        {
+                            if ($return_array['reason'] == 'invalid_format')
+                            {
+                                ?><div><strong style="color:red; font-size: 17px;">Błędny format pliku - niekopmletne lub zbędne dane</strong></div><?php
+                            }
+                            else if ($return_array['reason'] == 'cannot_open_file')
+                            {
+                                ?><div><strong style="color:red; font-size: 17px;">Nie można otworzyć podanego pliku</strong></div><?php
+                            }
+                            else if ($return_array['reason'] == 'wrong_records')
+                            {
+                                ?>
+                                    <div><strong style="color: #FF8C00; font-size: 17px;">Wystąpił błąd podczas dodawania następujących rekordów:</strong></div>
+                                    <div>
+                                        <?php
+                                            $error_lines = $return_array['error_lines'];
+                                            for ($i = 0; $i < count($error_lines); $i++)
+                                            {
+                                                $line = $error_lines[$i];
+                                                echo('<span>Linia nr ' . $line[0] . ': serial_code = ' . $line[1] . '; package_reference = ' . $line[2] . '; expires_at = ' . $line[3] . '; status = ' . $line[4] . '</span><br>');
+                                            }
+                                        ?>
+                                    </div>
+                                <?php
+                            }
+                        }
+                        else
+                        {
+                            ?><div><strong style="color:green; font-size: 17px;">Wszystkie kody zostały dodane pomyślnie</strong></div><?php
+                        }
+                    }
+                }
+            }
+>>>>>>> 3b3e8aa (0.5.0)
             else if ($action == 'edit_code')
             {
                 $serial_code = $_POST['serial_code'];
@@ -554,9 +664,41 @@ function test_plugin_page_default()
                 </form>
             </div>
         </div>
+<<<<<<< HEAD
         <div id="comments-help">
             <h2>Plik z komentarzami - wyjaśnienie</h2>
             Plik z komentarzami, jak zostało napisane wyżej, jest to plik (tekstowy .txt) zawierający komentarze do wyświetlenia klientowi.
+=======
+        <div id="add-code-from-file-help">
+            <h2>Dodawanie kodów z pliku - wyjaśnienie</h2>
+            Ścieżka do pliku z kodami musi być absolutna względem całego systemu plików, tzn. musi zaczynać się od katalogu "/home".
+            <br>
+            Plik powinien mieć następujący format:
+            <h4>
+                kod1;pakiet1;wygasa1;status1<br>
+                kod2;pakiet2;wygasa2;status2<br>
+                kod3;pakiet3;wygasa3;status3
+            </h4>
+            gdzie:
+            <br>
+            <strong>kod</strong> - numer kodu<br>
+            <strong>pakiet</strong> - numer pakietu, do którego się odwołuje<br>
+            <strong>wygada</strong> - data wygaśnięcia kodu w formacie YYYY-MM-DD hh:mm:ss lub NULL w przypadku, gdy kod ma być ważny przez czas nieokreślony (czyli do daty pierwszego użycia + czas ważności kodów, możliwy do zmiany w opcjach na samej górze)<br>
+            <strong>status</strong> - status kod; domyślnie 'active', lecz można też dać 'expired' - wtedy kod nie będzie działał, bo "już wygasł"
+            <br><br>
+            Przykład zawartości poprawnie sformatowanego pliku:
+            <br><br>
+            <i>
+                123;1;NULL;active<br>
+                1234;2;2025-09-23 22:48:56;active<br>
+                12345;3;NULL;expired
+            </i>
+        </div>
+        <div id="comments-help">
+            <h2>Plik z komentarzami - wyjaśnienie</h2>
+            Plik z komentarzami, jak zostało napisane wyżej, jest to plik (tekstowy .txt) zawierający komentarze do wyświetlenia klientowi.
+            Ścieżka do tego pliku - podobnie jak do pliku z kodami - musi być absolutna względem całego systemu plików (wyjaśnienie wyżej)
+>>>>>>> 3b3e8aa (0.5.0)
             <br>
             Struktura tego pliku wygląda następująco: każda linia zawiera oddzielny komentarz, sformatowany w postaci ID komentarza oraz 
             jego treści (razem ze stylami) oddzielonych tyldą, oto przykład:
