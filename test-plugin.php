@@ -112,7 +112,7 @@ function add_serial_code_input($attr = [], $content = null, $tag = '')
 
 register_activation_hook(__FILE__, 'test_activation');
 register_uninstall_hook(__FILE__, 'test_uninstall');
-add_shortcode('plugin-test', 'add_serial_code_input');
+add_shortcode('scdm', 'add_serial_code_input');
 
 add_action( 'init',  function() {
     add_rewrite_rule('download/([^/]*)/?$', 'index.php?download=$matches[1]', 'top');
