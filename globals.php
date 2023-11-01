@@ -2,7 +2,7 @@
 
 require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-define('PLUGIN_VERSION', '0.5.0');
+define('PLUGIN_VERSION', '0.6.0');
 
 define('PRODUCT_DOWNLOADS_AMOUNT_DEFAULT', 3);
 define('CODE_EXIPRY_TIME_DAYS_DEFAULT', 1);

@@ -96,6 +96,26 @@ function close_edit_code_dialog()
 	document.getElementById('code_edit_dialog').close();
 }
 
+function show_hide_full_codes_table(id_min, id_max)
+{
+	let show = document.getElementById('code_row_' + id_min).style.display == 'none' ? true : false;
+	let new_display_style = show ? '' : 'none';
+	for (i = id_min; i <= id_max; i++)
+		document.getElementById('code_row_' + i).style.display = new_display_style;
+	let more = document.getElementById('code_row_more');
+	let button = document.getElementById('show_hide_codes_table_button');
+	if (show)
+	{
+		more.style.display = 'none';
+		button.innerText = 'Ukryj całą tabelę';
+	}
+	else
+	{
+		more.style.display = '';
+		button.innerText = 'Pokaż całą tabelę';
+	}
+}
+
 function triggerSubmitEventAddCodeFromText()
 {
 	form = document.getElementById('add_code_from_file_confirmation_form');

@@ -38,6 +38,11 @@ else
     $file_path = $check_result['file_path'];
     $file_ext_name = $check_result['file_ext_name'];
     if ($log == '1')
-        add_download_log($dynamic_path, $serial_code, $product_id);
+    {
+        $visitor_ip = $_SERVER['REMOTE_ADDR'];
+        $user_agent = $_SERVER['HTTP_USER_AGENT'];
+        $date_time = date_format(date_create('now', new DateTimeZone('Europe/Warsaw')), 'Y-m-d H:i:s');
+        add_download_log($serial_code, $product_id, $visitor_ip, $date_time, $user_agent, 1);
+    }
     send_file($file_path, $file_ext_name);
 }

@@ -1,8 +1,10 @@
 <?php
 
 /**
- * Plugin Name:     Test
- * Version:         0.4.3
+ * Plugin Name:     Serial Code & Download Manager
+ * Version:         0.6.0
+ * Author:          Piotr Pazdan
+ * Description:     Menedżer kodów seryjnych wraz z pobieraniem
  */
 
 session_start();
@@ -30,15 +32,24 @@ function add_filter_check($query_vars)
     return $query_vars;
 }
 
+function add_filter_add_download_log($query_vars)
+{
+    $query_vars[] = 'add-download-log';
+    return $query_vars;
+}
+
 function add_templates($template)
 {
     $var_download = get_query_var('download');
     $var_check = get_query_var('check');
-    if ($var_download == false && $var_check == false)
+    $var_add_download_log = get_query_var('add-download-log');
+    if ($var_download == false && $var_check == false && $var_add_download_log == false)
         return $template;
     if ($var_download != false)
-        return WP_PLUGIN_DIR . '/test-plugin/download-page-template.php';
-    return WP_PLUGIN_DIR . '/test-plugin/check-code-template.php';
+        return WP_PLUGIN_DIR . '/scdm/download-page-template.php';
+    if ($var_check != false)
+        return WP_PLUGIN_DIR . '/scdm/check-code-template.php';
+    return WP_PLUGIN_DIR . '/scdm/add-download-log.php';
 }
 
 function test_uninstall()
@@ -46,6 +57,7 @@ function test_uninstall()
     remove_action('template_include', 'add_templates');
     remove_filter('query_vars', 'add_filter_download');
     remove_filter('query_vars', 'add_filter_check');
+    remove_filter('query_vars', 'add_filter_add_download_log');
     flush_rewrite_rules();
     remove_shortcode('plugin-test');
 }
@@ -82,7 +94,7 @@ function add_serial_code_input($attr = [], $content = null, $tag = '')
         case CODE_RESULT_VALID:
             $package = $resp['package'];
             $output .= '<script>';
-            $js_array = file(WP_PLUGIN_DIR . '/test-plugin/js/client-dialog-handler.js');
+            $js_array = file(WP_PLUGIN_DIR . '/scdm/js/client-dialog-handler.js');
             foreach ($js_array as $line)
                 $output .= $line;
             $output .= '</script>
@@ -97,26 +109,6 @@ function add_serial_code_input($attr = [], $content = null, $tag = '')
 
     return $output;
 }
-/*
-function serial_code_validation($attr = [], $content = null, $tag = '')
-{
-    $serial_code = $_POST['serial_code'];
-    $certain_product_expired = $_REQUEST['cpe'];
-    $shared_package = null;
-    if ($certain_product_expired == 1)
-        return invalid_serial_code_certain_product_expired();
-    if ($serial_code == null)
-        return invalid_serial_code_illegal_characters();
-    if (!ctype_digit($serial_code))
-        return invalid_serial_code_illegal_characters();
-
-    $shared_package = get_package($serial_code);
-    if ($shared_package == -1)
-        return invalid_serial_code_expired();
-    
-    return valid_serial_code($serial_code, $shared_package);
-}
-*/
 
 register_activation_hook(__FILE__, 'test_activation');
 register_uninstall_hook(__FILE__, 'test_uninstall');
@@ -125,10 +117,12 @@ add_shortcode('plugin-test', 'add_serial_code_input');
 add_action( 'init',  function() {
     add_rewrite_rule('download/([^/]*)/?$', 'index.php?download=$matches[1]', 'top');
     add_rewrite_rule('check?([^/]*)/?$', 'index.php?check=check/$matches[1]', 'top');
+    add_rewrite_rule('add-download-log?([^/]*)/?$', 'index.php?add-download-log=add-download-log/$matches[1]', 'top');
     flush_rewrite_rules();
 } );
 
 add_filter('query_vars', 'add_filter_download');
 add_filter('query_vars', 'add_filter_check');
+add_filter('query_vars', 'add_filter_add_download_log');
 
 add_action('template_include', 'add_templates');

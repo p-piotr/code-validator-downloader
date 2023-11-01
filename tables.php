@@ -336,3 +336,17 @@ function delete_code($serial_code)
         }
     return true;
 }
+
+function add_download_log($serial_code, $product_id, $visitor_ip, $date_time, $user_agent, $ctd)
+{
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    global $wpdb, $table_name_downloads;
+    //$visitor_ip = $_SERVER['REMOTE_ADDR'];
+    //$user_agent = $_SERVER['HTTP_USER_AGENT'];
+    //$date_time = date_format(date_create('now', new DateTimeZone('Europe/Warsaw')), 'Y-m-d H:i:s');
+    return $wpdb->insert($table_name_downloads,
+        array('serial_code' => $serial_code, 'product_id' => $product_id, 
+        'visitor_ip' => $visitor_ip, 'date_time' => $date_time,
+        'user_agent' => $user_agent, 'ctd' => $ctd));
+    //var_dump($wpdb->last_error);
+}

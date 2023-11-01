@@ -4,16 +4,16 @@ add_action('admin_menu', 'test_create_menu');
 
 function test_create_menu()
 {
-    add_menu_page('Ustawienia Test Plugin', 'Test Plugin', 'administrator', __FILE__,
-    'test_plugin_page', '', __FILE__);
+    add_menu_page('Ustawienia Serial Code & Download Manager', 'Serial Code & Download Manager', 'administrator', __FILE__,
+    'scdm_page', '', __FILE__);
     add_action('admin_init', 'register_test_plugin_settings');
 }
 
 function register_test_plugin_settings()
 {
-    register_setting('test-plugin-settings-group', 'comments_file_location');
-    register_setting('test-plugin-settings-group', 'code_expiry_time_days');
-    register_setting('test-plugin-settings-group', 'product_downloads_amount');
+    register_setting('scdm-settings-group', 'comments_file_location');
+    register_setting('scdm-settings-group', 'code_expiry_time_days');
+    register_setting('scdm-settings-group', 'product_downloads_amount');
 }
 
 function show_products_table()
@@ -225,7 +225,23 @@ function show_codes_table()
             </form>
         </dialog>
         <div>
-            <h2>Kody seryjne</h2>
+            <?php 
+                require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+                require_once('globals.php');
+                global $wpdb, $table_name_codes;
+
+                $sql = "SELECT * FROM $table_name_codes;";
+                $codes = $wpdb->get_results($sql);
+            ?>
+            <div>
+                <h2>Kody seryjne</h2>
+                <?php 
+                    if (count($codes) > 5)
+                    {
+                        ?><button id="show_hide_codes_table_button" class="own" style="margin-bottom: 5px;" onclick="show_hide_full_codes_table(<?php echo(5); echo(', '); echo(count($codes) - 1);?>)">Pokaż całą tabelę</button><?php
+                    }
+                ?>
+            </div>
             <table class="dataTable">
                 <tr>
                     <th>Kod seryjny</th>
@@ -233,17 +249,12 @@ function show_codes_table()
                     <th>Wygasa za</th>
                     <th>Status</th>
                 </tr>
-                <?php 
-                    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-                    require_once('globals.php');
-                    global $wpdb, $table_name_codes;
-
-                    $sql = "SELECT * FROM $table_name_codes;";
-                    $codes = $wpdb->get_results($sql);
+                <?php
+                    $i = 0;
                     foreach ($codes as $code)
                     {
                         ?>
-                            <tr>
+                            <tr id="code_row_<?php echo($i) ?>" <?php if ($i > 4) echo('style="display: none"') ?>>
                                 <td class="row" id="code_serialcode_<?php echo $code->serial_code ?>"><?php echo $code->serial_code ?></td>
                                 <td class="row" id="code_packagereference_<?php echo $code->serial_code ?>"><?php echo $code->package_reference ?></td>
                                 <td class="row" id="code_expiresat_<?php echo $code->serial_code ?>"><?php echo $code->expires_at ?></td>
@@ -258,8 +269,15 @@ function show_codes_table()
                                 </td>
                             </tr>
                         <?php
+                        $i++;
                     }
                 ?>
+                <tr id="code_row_more" <?php if (count($codes) < 6) echo('style="display: none"') ?>>
+                    <td class="row" id="code_serialcode_more">...</td>
+                    <td class="row" id="code_packagereference_more">...</td>
+                    <td class="row" id="code_expiresat_more">...</td>
+                    <td class="row" id="code_status_more">...</td>
+                </tr>
             </table>
             <div style="margin-top: 5px">
                 <button class="own" onclick="add_code_dialog()">Dodaj</button>
@@ -319,19 +337,19 @@ function show_downloads_table()
     <?php
 }
 
-function test_plugin_page_default()
+function scdm_page_default()
 {
     ?>
     <style>
         <?php 
-            $array = file(WP_PLUGIN_DIR . '/test-plugin/css/admin-page.css');
+            $array = file(WP_PLUGIN_DIR . '/scdm/css/admin-page.css');
             foreach ($array as $line)
                 echo $line;
         ?>
     </style>
     <script>
         <?php 
-            $array = file(WP_PLUGIN_DIR . '/test-plugin/js/admin-page.js');
+            $array = file(WP_PLUGIN_DIR . '/scdm/js/admin-page.js');
             foreach ($array as $line)
                 echo $line;
         ?>
@@ -627,11 +645,11 @@ function test_plugin_page_default()
                 }
             }
         ?>
-        <h1>Ustawienia Test Plugin</h1>
+        <h1>Ustawienia Serial Code & Download Manager</h1>
         </div>
         <form method="POST" action="options.php">
-            <?php settings_fields('test-plugin-settings-group')?>
-            <?php do_settings_sections('test-plugin-settings-group')?>
+            <?php settings_fields('scdm-settings-group')?>
+            <?php do_settings_sections('scdm-settings-group')?>
             <div style="margin-bottom: 15px; margin-right: 15px;">
                 Lokalizacja pliku z komentarzami (absolutna ścieżka)
                 <br>
@@ -676,7 +694,7 @@ function test_plugin_page_default()
             </div>
         </div>
         <div id="add-code-from-file-help">
-            <h2>Dodawanie kodów z pliku - wyjaśnienie</h2>
+            <h2>Dodawanie kodów z pliku</h2>
             Ścieżka do pliku z kodami musi być absolutna względem całego systemu plików, tzn. musi zaczynać się od katalogu "/home".
             <br>
             Plik powinien mieć następujący format:
@@ -701,7 +719,7 @@ function test_plugin_page_default()
             </i>
         </div>
         <div id="comments-help">
-            <h2>Plik z komentarzami - wyjaśnienie</h2>
+            <h2>Plik z komentarzami</h2>
             Plik z komentarzami, jak zostało napisane wyżej, jest to plik (tekstowy .txt) zawierający komentarze do wyświetlenia klientowi.
             Ścieżka do tego pliku - podobnie jak do pliku z kodami - musi być absolutna względem całego systemu plików (wyjaśnienie wyżej)
             <br>
@@ -724,10 +742,10 @@ function test_plugin_page_default()
     <?php
 }
 
-function test_plugin_page()
+function scdm_page()
 {
     ?>
-        <?php test_plugin_page_default() ?>
+        <?php scdm_page_default() ?>
     <?php
 }
 
