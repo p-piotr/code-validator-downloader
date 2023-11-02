@@ -8,8 +8,13 @@ function is_serial_code_valid($serial_code)
 {
     /*if ($serial_code == null)
         return array('status' => CODE_RESULT_INVALID, 'package' => -1);*/
+<<<<<<< HEAD
     /*if (!ctype_digit($serial_code))
         return array('status' => CODE_RESULT_ILLEGAL_CHARACTERS, 'package' => -1);*/
+=======
+    if (!ctype_digit($serial_code))
+        return array('status' => CODE_RESULT_ILLEGAL_CHARACTERS, 'package' => -1);
+>>>>>>> 2241d55c797102d2949136387f8e8009f8c66f5f
 
     $shared_package = get_package($serial_code);
     if ($shared_package == -1)
@@ -61,7 +66,11 @@ function get_package($serial_code)
     {
         date_modify($date, '+' . strval($code_expiry_time_days) . 'day');
         $date_expires_at = date_format($date, 'Y-m-d H:i:s');
+<<<<<<< HEAD
         $sql = "UPDATE $table_name_codes SET expires_at = '$date_expires_at' WHERE serial_code = '$serial_code';";
+=======
+        $sql = "UPDATE $table_name_codes SET expires_at = '$date_expires_at' WHERE serial_code = $serial_code;";
+>>>>>>> 2241d55c797102d2949136387f8e8009f8c66f5f
         dbDelta($sql);
     }
     return $element->package_reference;

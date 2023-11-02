@@ -54,7 +54,11 @@ function create_code_table()
     if (!$table_codes_exist)
     {
         $sql = "CREATE TABLE $table_name_codes (
+<<<<<<< HEAD
             serial_code VARCHAR(32) NOT NULL,
+=======
+            serial_code INT NOT NULL,
+>>>>>>> 2241d55c797102d2949136387f8e8009f8c66f5f
             package_reference INT NOT NULL,
             expires_at DATETIME,
             status VARCHAR(16),
@@ -66,7 +70,11 @@ function create_code_table()
     if (!$table_dynamic_links_exist)
     {
         $sql = "CREATE TABLE $table_name_dynamic_links (
+<<<<<<< HEAD
             serial_code VARCHAR(32) NOT NULL,
+=======
+            serial_code INT NOT NULL,
+>>>>>>> 2241d55c797102d2949136387f8e8009f8c66f5f
             product_id INT NOT NULL,
             dynamic_path VARCHAR(16),
             FOREIGN KEY(serial_code) REFERENCES $table_name_codes(serial_code),
@@ -78,7 +86,11 @@ function create_code_table()
     {
         $sql = "CREATE TABLE $table_name_downloads (
             id INT NOT NULL AUTO_INCREMENT,
+<<<<<<< HEAD
             serial_code VARCHAR(32) NOT NULL,
+=======
+            serial_code INT NOT NULL,
+>>>>>>> 2241d55c797102d2949136387f8e8009f8c66f5f
             product_id INT NOT NULL,
             visitor_ip VARCHAR(48),
             date_time DATETIME,
