@@ -1,0 +1,34 @@
+th, td.row {
+    border: 1px solid #ffffff;
+    text-align: left;
+    padding: 8px;
+    background-color: #ffffff;
+}
+td.td_button {
+    padding: 0 0 0 10px;
+}
+button.own, input.own {
+    padding: 6px 10px 6px 10px;
+    border-radius: 3px;
+    background: #2271b1;
+    color: #ffffff;
+    border: none;
+}
+button.own:hover, input.own:hover {
+    background: #005177;
+    cursor: pointer;
+}
+input.delete {
+    background: #d40000;
+}
+input.delete:hover {
+    background: #630000;
+}
+a.close-X {
+    padding: 2px;
+    border-radius: 15px;
+    cursor: pointer;
+}
+a.close-X:hover {
+    background-color: #ff6b6b;
+}
